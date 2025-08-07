@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="OCTGui.WorkSpace"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:OCTGui.Converters"
+             xmlns:local="clr-namespace:OCTGui"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1000" 
+             DataContextChanged="UserControl_DataContextChanged" >
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200"></RowDefinition>
+            <!-- Parameter -->
+            <RowDefinition Height="*"></RowDefinition>
+            <!-- OCT Signal-->
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition x:Name="Column1" Width="auto"></ColumnDefinition>
+            <ColumnDefinition x:Name="Column2" Width="auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="ImageGrid" Grid.Row="0" Grid.RowSpan="3" Background="Black">
+            <Image x:Name="webcamImage" Stretch="Uniform"  />
+            <Button Height="50" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Opacity="0.7" Command="{Binding ToggleFullscreen}" IsCancel="{Binding Fullscreen}">
+                <ContentControl Width="32" Height="32">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Setter Property="Template" Value="{StaticResource FullscreenOff}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Fullscreen}" Value="true">
+                                    <Setter Property="Template" Value="{StaticResource FullscreenOn}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Fullscreen}" Value="false">
+                                    <Setter Property="Template" Value="{StaticResource FullscreenOff}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+            </Button>
+        </Grid>
+
+        <Grid Visibility="{Binding Fullscreen, Converter={StaticResource BoolToVisibilityConverter}}" Width="380" Margin="10" Grid.Row="0" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="2" Background="LightGray">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ComboBox Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Profiles}"
+                                DisplayMemberPath="Profile"
+                                SelectedItem="{Binding SelectedProfile, Mode=TwoWay}" IsEnabled="{Binding NotReady}"/>
+            <TextBlock Margin="1" Grid.Row="1" Text="Pulsdauer" VerticalAlignment="Center"></TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding SelectedProfile.Pulselength, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding NotReady}"></TextBox>
+            <TextBlock Margin="1" Grid.Row="2" Text="Pulsfrequenz" VerticalAlignment="Center" ></TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding SelectedProfile.PulseRate, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding NotReady}"></TextBox>
+            <TextBlock Margin="1" Grid.Row="3" Text="Laserstrom" VerticalAlignment="Center"></TextBlock>
+            <TextBox Grid.Row="3" Grid.Column="1"  VerticalAlignment="Center" Text="{Binding SelectedProfile.LaserCurrent, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotReady}"></TextBox>
+            <TextBlock Margin="1" Grid.Row="4" Text="Notizen" VerticalAlignment="Center"></TextBlock>
+            <TextBox Grid.Row="4" Grid.Column="1"  VerticalAlignment="Center" Text="{Binding SelectedProfile.Notes, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotReady}"></TextBox>
+            <Button Grid.Row="5" Grid.Column="1" Width="100" HorizontalAlignment="Right" Content="Profil Speichern" Command="{Binding UpdateCommand}"></Button>
+        </Grid>
+        <Grid Visibility="{Binding Fullscreen, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Right" VerticalAlignment="Top">
+                <TextBlock FontSize="25" VerticalAlignment="Center" Text="OCT Signal"></TextBlock>
+                <Border Margin="20" Width="60" Height="60" VerticalAlignment="Center" CornerRadius="50">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="Yellow"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding OctSignalLamp}" Value="0">
+                                    <!-- OCT Signal is deactivated -->
+                                    <Setter Property="Background" Value="Gray"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding OctSignalLamp}" Value="1">
+                                    <!-- OCT Signal bone looks good -->
+                                    <Setter Property="Background" Value="Green"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding OctSignalLamp}" Value="2">
+                                    <!-- OCT Signal what is this? not a bone -->
+                                    <Setter Property="Background" Value="Yellow"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding OctSignalLamp}" Value="3">
+                                    <!-- OCT Signal bone is too thin -->
+                                    <Setter Property="Background" Value="Red"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+            </StackPanel>
+            <StackPanel>
+                <CheckBox Padding="4,-4,0,0" IsChecked="{Binding WantToSaveVideo}" Margin="15,10,0,0" FontSize="16" Content="Video speichern"/>
+                <CheckBox Padding="4,-4,0,0" IsChecked="{Binding Logging}" Margin="15,10,0,0" FontSize="16" Content="Logging"/>
+            </StackPanel>
+            
+            
+
+            <Border Grid.Column="2" Margin="20" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="50">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="Black"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CanRunLaser}" Value="True">
+                                <Setter Property="Background" Value="Gold"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CanRunLaser}" Value="False">
+                                <Setter Property="Background" Value="Black"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+            
+            
+        </Grid>
+        
+        <Grid HorizontalAlignment="Right" Width="400" Visibility="{Binding Fullscreen, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" >
+            <!--  Content="{Binding ReadyButtonText}"  -->
+            <Button HorizontalAlignment="Left" Width="185" Margin="5" Command="{Binding ReadyCommand}">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="Ready"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding NotReady}" Value="False">
+                                <Setter Property="Content" Value="Cancel"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding NotReady}" Value="True">
+                                <Setter Property="Content" Value="Ready"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button HorizontalAlignment="Right" Width="185" Margin="5" Content="OCT Kontrolle" Command="{Binding OctControlCommand}" IsEnabled="{Binding NotReady}"></Button>
+        </Grid>
+        <Border Visibility="{Binding Fullscreen, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Row="3" Grid.ColumnSpan="3" Background="White" BorderBrush="#FF003366" BorderThickness="0,5,0,0"></Border>
+    </Grid>
+</UserControl>

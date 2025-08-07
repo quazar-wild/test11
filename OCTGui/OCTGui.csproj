@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <FileVersion>0.3.0.0</FileVersion>
+    <AssemblyVersion>0.3.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,10 +23,26 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="OpenCvSharp4.Windows" Version="4.11.0.20250507" />
     <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.11.0.20250507" />
+    <PackageReference Include="System.IO.Ports" Version="9.0.7" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\Logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OCTGui.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="user" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="OCTProZ" Type="System.String" Scope="User">
+      <Value Profile="(Default)">TCP:localhost:5901</Value>
+    </Setting>
+    <Setting Name="LaserDiode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM:COM4:9600:None:8:One</Value>
+    </Setting>
+    <Setting Name="OctActivationStatus" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CamaraFPS" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="LogSaveFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="WindowState" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
+    <Setting Name="LogfileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">c:\smkdfnlkjdnh</Value>
+    </Setting>
+    <Setting Name="GPIO_Demo" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM:COM4:9600:None:8:One</Value>
+    </Setting>
+    <Setting Name="OCTProZTimeOut" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
+    <Setting Name="LaserDiodeTimeOut" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10000000</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

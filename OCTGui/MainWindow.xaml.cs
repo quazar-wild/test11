@@ -2,6 +2,12 @@
 using OpenCvSharp.WpfExtensions;
 using System.ComponentModel;
 using System.Windows.Threading;
+using System.Diagnostics;
+using System.Runtime.Serialization.DataContracts;
+using System.Configuration;
+using System.Windows;
+using OCTGui.ViewModels;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace OCTGui;
@@ -11,50 +17,25 @@ namespace OCTGui;
 /// </summary>
 public partial class MainWindow : System.Windows.Window
 {
-    private VideoCapture _capture;
-    private bool _isRunning = true;
+  
     public MainWindow()
     {
+        
         InitializeComponent();
-        StartCamera();
+        this.Closing += MainWindow_Closing;
     }
 
-    private void StartCamera()
+    private void MainWindow_Closing(object? sender, CancelEventArgs e)
     {
-        _capture = new VideoCapture(); // 0 = erste Kamera
-        _capture.Open(0,VideoCaptureAPIs.DSHOW);
-
-        Thread thread = new Thread(() =>
-        {
-            using (var mat = new Mat())
-            {
-                while (_isRunning)
-                {
-                    _capture.Read(mat);
-                    if (!mat.Empty())
-                    {
-                        var image = mat.ToBitmapSource();
-                        image.Freeze(); // wichtig für UI-Thread
-                        Dispatcher.Invoke(() => webcamImage.Source = image);
-                    }
-                }
-            }
-        });
-        thread.IsBackground = true;
-        thread.Start();
+        vmMainwindow vm = DataContext as vmMainwindow;
+        if (vm != null) vm.OnMainWindowClosing(sender, e);
     }
 
-    protected override void OnClosed(EventArgs e)
-    {
-        _isRunning = false;
-        _capture?.Release();
-        base.OnClosed(e);
-    }
+    //private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+    //{
+    //    AboutBox about = new AboutBox();
 
-    private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-    {
-        AboutBox about = new AboutBox();
-        about.Owner = this;
-        about.ShowDialog();
-    }
+    //    about.Owner = this;
+    //    about.ShowDialog();
+    //}
 }

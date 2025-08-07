@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,25 +10,31 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CommunityToolkit.Mvvm.Input;
 
 namespace OCTGui
 {
     /// <summary>
-    /// Interaction logic for AboutBox.xaml
+    /// Interaction logic for LoginView.xaml
     /// </summary>
-    public partial class AboutBox : Window
+
+    
+    public partial class LoginView : UserControl
     {
-        public AboutBox()
+        public LoginView()
         {
             InitializeComponent();
-            VersionTextBlock.Text = $"Version: V {CurrentVersion}";
+        }
 
-        }
-        public string CurrentVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            Close();
+            if (this.DataContext != null)
+            { ((dynamic)this.DataContext).Password = ((PasswordBox)sender).Password; }
         }
+
+        
     }
+
 }
